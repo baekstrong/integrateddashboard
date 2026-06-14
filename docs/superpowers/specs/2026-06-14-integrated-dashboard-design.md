@@ -43,14 +43,18 @@ Vercel KV에 프로젝트 객체 배열을 JSON으로 저장한다. 각 카드:
 
 ### 초기 시드
 
-첫 배포 시 아래 4개를 seed로 한 번 넣는다. 이후엔 화면에서 관리한다.
+첫 배포 시 아래 5개를 seed로 한 번 넣는다. 이후엔 화면에서 관리한다.
 
-1. 근력학교 웹앱
-2. 원데이 수업 예약 시스템
-3. 내 홈페이지
-4. 유튜브 편집 자동화 대시보드
+| 이름 | liveUrl | adminUrl | repoUrl | host |
+|------|---------|----------|---------|------|
+| 케틀벨 원데이 수업 | `https://baekstrong.github.io/productdetailpage/` | `https://baekstrong.github.io/productdetailpage/admin` | `https://github.com/baekstrong/productdetailpage` | GitHub Pages |
+| 유튜브 편집 대시보드 | `http://127.0.0.1:8765/` | — | — | 로컬 |
+| 백관장 홈페이지 | `https://masterbaek.vercel.app/` | — | `https://github.com/baekstrong/baekwebpage` | Vercel |
+| 근력학교 앱 | `https://baekstrong.github.io/timetablemanager/` | — | `https://github.com/baekstrong/timetablemanager` | GitHub Pages |
+| 메트로놈 | `https://baekstrong.github.io/metronome/` | — | `https://github.com/baekstrong/metronome` | GitHub Pages |
 
-URL 등 상세값은 구현 시 사용자에게 확인해 채운다(미상이면 빈 값으로 두고 화면에서 편집).
+- 케틀벨 원데이 수업은 라이브(수강생)·관리자 페이지를 한 카드로 묶는다.
+- 유튜브 편집 대시보드의 liveUrl은 임시 로컬 주소이며 추후 변경 예정. `note`에 "추후 주소 변경 예정"을 표기한다.
 
 ## 4. 인증
 
