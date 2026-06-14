@@ -19,8 +19,11 @@ export function DashboardClient({ initial }: { initial: Project[] }) {
     if (res.ok) {
       const created: Project = await res.json()
       setProjects((prev) => [...prev, created])
+      setForm({ open: false })
+    } else {
+      const e = await res.json().catch(() => ({}))
+      alert(e.error ?? "저장에 실패했습니다.")
     }
-    setForm({ open: false })
   }
 
   async function update(id: string, input: ProjectInput) {
@@ -32,14 +35,21 @@ export function DashboardClient({ initial }: { initial: Project[] }) {
     if (res.ok) {
       const updated: Project = await res.json()
       setProjects((prev) => prev.map((p) => (p.id === id ? updated : p)))
+      setForm({ open: false })
+    } else {
+      const e = await res.json().catch(() => ({}))
+      alert(e.error ?? "저장에 실패했습니다.")
     }
-    setForm({ open: false })
   }
 
   async function remove(p: Project) {
     if (!confirm(`"${p.name}" 카드를 삭제할까요?`)) return
     const res = await fetch(`/api/projects/${p.id}`, { method: "DELETE" })
-    if (res.ok) setProjects((prev) => prev.filter((x) => x.id !== p.id))
+    if (res.ok) {
+      setProjects((prev) => prev.filter((x) => x.id !== p.id))
+    } else {
+      alert("삭제에 실패했습니다.")
+    }
   }
 
   async function logout() {

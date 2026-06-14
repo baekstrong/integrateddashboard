@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server"
-import { COOKIE_NAME, makeToken, getPassword, getSecret } from "@/lib/auth"
+import { COOKIE_NAME, makeToken, getPassword, getSecret, safeEqual } from "@/lib/auth"
 
 export async function POST(req: Request) {
   const { password } = await req.json().catch(() => ({ password: "" }))
-  if (!password || password !== getPassword()) {
+  const secret = getSecret()
+  const incoming = await makeToken(password ?? "", secret)
+  const expected = await makeToken(getPassword(), secret)
+  if (!password || !safeEqual(incoming, expected)) {
     return NextResponse.json({ error: "비밀번호가 틀렸습니다." }, { status: 401 })
   }
-  const token = await makeToken(getPassword(), getSecret())
+  const token = expected
   const res = NextResponse.json({ ok: true })
   res.cookies.set(COOKIE_NAME, token, {
     httpOnly: true,

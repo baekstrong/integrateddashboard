@@ -3,6 +3,7 @@ import { KvStore } from "./kvStore"
 import type { ProjectStore } from "./store"
 import { SEED } from "./seed"
 
+// 서버리스에서는 콜드 스타트마다 초기화될 수 있음(KV 환경에선 무상태라 무방, 인메모리는 임시 저장)
 let memo: ProjectStore | null = null
 
 export function getStore(): ProjectStore {

@@ -37,9 +37,13 @@ export const SEED: ProjectInput[] = [
 
 import type { ProjectStore } from "./store"
 
+let seeded = false
+
 // KV가 비어 있으면 시드를 한 번 주입한다(idempotent).
 export async function ensureSeeded(store: ProjectStore): Promise<void> {
+  if (seeded) return
   const existing = await store.list()
-  if (existing.length > 0) return
+  if (existing.length > 0) { seeded = true; return }
   for (const input of SEED) await store.add(input)
+  seeded = true
 }
