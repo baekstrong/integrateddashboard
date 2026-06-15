@@ -35,15 +35,17 @@ export const SEED: ProjectInput[] = [
   },
 ]
 
+import { nanoid } from "nanoid"
+import type { Project } from "./types"
 import type { ProjectStore } from "./store"
 
-let seeded = false
-
-// KV가 비어 있으면 시드를 한 번 주입한다(idempotent).
-export async function ensureSeeded(store: ProjectStore): Promise<void> {
-  if (seeded) return
+// 저장소가 비어 있으면 시드를 "한 번의 쓰기"로 원자적으로 주입하고, 현재 목록을 반환한다.
+// - 개별 add 루프 대신 replaceAll을 써서, 동시 요청이 인터리빙돼도 결과가 항상 SEED 전체로 수렴(시드 유실 방지).
+// - 모듈 플래그를 두지 않으므로, 저장소가 다시 비면 언제든 재시드되어 복구가 가능하다.
+export async function ensureSeeded(store: ProjectStore): Promise<Project[]> {
   const existing = await store.list()
-  if (existing.length > 0) { seeded = true; return }
-  for (const input of SEED) await store.add(input)
-  seeded = true
+  if (existing.length > 0) return existing
+  const seeded: Project[] = SEED.map((input) => ({ id: nanoid(), ...input }))
+  await store.replaceAll(seeded)
+  return seeded
 }

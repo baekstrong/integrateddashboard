@@ -44,4 +44,15 @@ describe("InMemoryStore", () => {
     const s = new InMemoryStore([{ id: "1", name: "Seed" }])
     expect(await s.list()).toHaveLength(1)
   })
+
+  it("replaceAll overwrites the entire list in one call", async () => {
+    const s = new InMemoryStore([{ id: "1", name: "Old" }])
+    await s.replaceAll([
+      { id: "a", name: "A" },
+      { id: "b", name: "B" },
+    ])
+    const list = await s.list()
+    expect(list).toHaveLength(2)
+    expect(list.map((p) => p.name)).toEqual(["A", "B"])
+  })
 })

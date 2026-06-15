@@ -43,4 +43,8 @@ export class KvStore implements ProjectStore {
     await this.writeAll(next)
     return true
   }
+
+  async replaceAll(projects: Project[]): Promise<void> {
+    await this.writeAll(projects)
+  }
 }

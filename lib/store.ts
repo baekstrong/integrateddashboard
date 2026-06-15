@@ -6,6 +6,8 @@ export interface ProjectStore {
   add(input: ProjectInput): Promise<Project>
   update(id: string, patch: Partial<ProjectInput>): Promise<Project | null>
   remove(id: string): Promise<boolean>
+  // 전체 목록을 한 번의 쓰기로 교체(원자적). 시드 주입 등에 사용.
+  replaceAll(projects: Project[]): Promise<void>
 }
 
 export class InMemoryStore implements ProjectStore {
@@ -36,5 +38,9 @@ export class InMemoryStore implements ProjectStore {
     const before = this.projects.length
     this.projects = this.projects.filter((p) => p.id !== id)
     return this.projects.length < before
+  }
+
+  async replaceAll(projects: Project[]): Promise<void> {
+    this.projects = [...projects]
   }
 }

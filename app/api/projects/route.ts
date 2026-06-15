@@ -5,8 +5,7 @@ import type { ProjectInput } from "@/lib/types"
 
 export async function GET() {
   const store = getStore()
-  await ensureSeeded(store)
-  return NextResponse.json(await store.list())
+  return NextResponse.json(await ensureSeeded(store))
 }
 
 export async function POST(req: Request) {
